@@ -38,18 +38,23 @@ import owuor91.io.repository.BookRepository;
     Book book = new Book();
     book.setTitle(title);
     book.setDescription(description);
-    BookCategory bookCategory = bookCategoryRepository.getOne(Integer.parseInt(categoryId));
-    book.setBookCategory(bookCategory);
-    return bookRepository.save(book);
+    book.setBookCategory(bookCategoryRepository.getOne(Integer.parseInt(categoryId)));
+    Book book1 = bookRepository.save(book);
+    book1.setCategoryId(book1.getBookCategory().getId());
+    return book1;
   }
 
   @PutMapping("/api/books/{id}")
   public Book editBook(@PathVariable("id") String id, @RequestParam("title") String title,
-      @RequestParam("description") String description) {
+      @RequestParam("description") String description,
+      @RequestParam("book_category_id") String categoryId) {
     Book book = bookRepository.getOne(Integer.parseInt(id));
     book.setTitle(title);
     book.setDescription(description);
-    return bookRepository.save(book);
+    book.setBookCategory(bookCategoryRepository.getOne(Integer.parseInt(categoryId)));
+    Book book1 = bookRepository.save(book);
+    book1.setCategoryId(book1.getBookCategory().getId());
+    return book1;
   }
 
   @DeleteMapping("/api/books/{id}")
